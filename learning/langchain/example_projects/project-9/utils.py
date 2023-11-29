@@ -16,9 +16,7 @@ def get_website_data(sitemap_url):
         sitemap_url
     )
 
-    docs = loader.load()
-
-    return docs
+    return loader.load()
 
 # Function to split data into smaller chunks
 def split_data(docs):
@@ -29,14 +27,12 @@ def split_data(docs):
         length_function=len,
     )
 
-    docs_chunks = text_splitter.split_documents(docs)
-    return docs_chunks
+    return text_splitter.split_documents(docs)
 
 # Function to create embeddings instance
 def create_embeddings():
     print('Creating embeddings...')
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
+    return SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 # Function to push data to Pinecone
 def push_to_pinecone(pinecone_apikey, pinecone_environment, pinecone_index_name, embeddings, docs):
@@ -47,8 +43,7 @@ def push_to_pinecone(pinecone_apikey, pinecone_environment, pinecone_index_name,
     )
 
     index_name = pinecone_index_name
-    index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
-    return index
+    return Pinecone.from_documents(docs, embeddings, index_name=index_name)
 
 def push_to_chroma(docs, embeddings, persist_directory="./chroma_db"):
     '''
@@ -81,9 +76,6 @@ def pull_from_pinecone(pinecone_apikey, pinecone_environment, pinecone_index_nam
 # This function will help us in fetching the top relevent documents from our vector store - Pinecone Index
 def get_similar_docs(db, query, k=2):
     print('Performing similarity search...')
-    similar_docs = db.similarity_search(query, k=k)
-    return similar_docs
+    return db.similarity_search(query, k=k)
 
 
-if __name__ == "__main__":
-    pass

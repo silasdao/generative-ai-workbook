@@ -78,5 +78,3 @@ def config_list_from_dotenv(dotenv_file_path: Optional[str] = None,
     return config_list
 
 
-if __name__ == "__main__":
-    pass

@@ -53,15 +53,11 @@ db = FAISS.from_documents(data, embeddings)
 
 #Function to receive input from user and store it in a variable
 def get_text():
-    input_text = st.text_input("You: ", key= input)
-    return input_text
+    return st.text_input("You: ", key= input)
 
 
 user_input=get_text()
-submit = st.button('Find similar Things')  
-
-if submit:
-    
+if submit := st.button('Find similar Things'):
     #If the button is clicked, the below snippet will fetch us the similar text
     docs = db.similarity_search(user_input)
     pp.pprint(docs)

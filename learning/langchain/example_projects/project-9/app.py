@@ -7,6 +7,7 @@ using vector representations of your query ie: similarity_search()
 
 """
 
+
 import os
 import constants
 from utils import (get_website_data, split_data, create_embeddings,
@@ -32,11 +33,11 @@ load_button = st.sidebar.button("Upload", key="load_button")
 db = None
 embeddings=create_embeddings()
 
-#If the bove button is clicked, pushing the data to Chroma...
 if load_button:
-    #Proceed only if API keys are provided
-    if st.session_state['HUGGINGFACEHUB_API_TOKEN'] != "":
+    if st.session_state['HUGGINGFACEHUB_API_TOKEN'] == "":
+        st.sidebar.error("Ooopssss!!! Please provide API keys.....")
 
+    else:
         #Fetch data from site
         site_data=get_website_data(constants.WEBSITE_URL)
         st.write("Data pull done...")
@@ -48,38 +49,32 @@ if load_button:
         db = push_to_chroma(chunks_data, embeddings)
         st.write("Pushing data to Chroma done...")
         st.sidebar.success("Data pushed to Chroma successfully!")
-    else:
-        st.sidebar.error("Ooopssss!!! Please provide API keys.....")
-
 #********SIDE BAR Funtionality ended*******
 
 #Captures User Inputs
 prompt = st.text_input('How can I help you my friend ❓', key="prompt")  # The box for the text prompt
 document_count = st.slider('How many links should I return? 🔗', 0, 5, 2, step=1)
-submit = st.button("Search") 
-
-
-if submit:
+if submit := st.button("Search"):
     print('Search submitted')
     #Proceed only if API keys are provided
-    if st.session_state['HUGGINGFACEHUB_API_TOKEN'] != "":
-        if db == None:
-            st.sidebar.error("Documents have not yet been embedded.")
-        else:
-            #Fetch relavant documents from Pinecone index
-            relavant_docs = get_similar_docs(db, prompt, document_count)
-            st.write(relavant_docs)
-
-            #Displaying search results
-            st.success("Please find the search results :")
-            #Displaying search results
-            st.write("search results list....")
-            for document in relavant_docs:
-                st.write("👉**Result : " + str(relavant_docs.index(document)+1)+"**")
-                st.write("**Info**: " + document[0].page_content)
-                st.write("**Link**: " + document[0].metadata['source'])
-    else:
+    if st.session_state['HUGGINGFACEHUB_API_TOKEN'] == "":
         st.sidebar.error("Please provide API keys.")
+
+    elif db is None:
+        st.sidebar.error("Documents have not yet been embedded.")
+    else:
+        #Fetch relavant documents from Pinecone index
+        relavant_docs = get_similar_docs(db, prompt, document_count)
+        st.write(relavant_docs)
+
+        #Displaying search results
+        st.success("Please find the search results :")
+        #Displaying search results
+        st.write("search results list....")
+        for document in relavant_docs:
+            st.write(f"👉**Result : {str(relavant_docs.index(document) + 1)}**")
+            st.write(f"**Info**: {document[0].page_content}")
+            st.write("**Link**: " + document[0].metadata['source'])
 
 
 

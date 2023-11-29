@@ -29,10 +29,7 @@ def safe_get(data, dot_chained_keys):
     keys = dot_chained_keys.split(".")
     for key in keys:
         try:
-            if isinstance(data, list):
-                data = data[int(key)]
-            else:
-                data = data[key]
+            data = data[int(key)] if isinstance(data, list) else data[key]
         except (KeyError, TypeError, IndexError):
             return None
     return data
@@ -86,6 +83,4 @@ def add_cap_ref(
         returns 'Refactor this code. Make it more readable using this EXAMPLE.\n\nEXAMPLE\n\ndef foo():\n    return True'
     """
 
-    new_prompt = f"""{prompt} {prompt_suffix}\n\n{cap_ref}\n\n{cap_ref_content}"""
-
-    return new_prompt
+    return f"""{prompt} {prompt_suffix}\n\n{cap_ref}\n\n{cap_ref_content}"""

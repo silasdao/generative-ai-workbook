@@ -35,8 +35,7 @@ def get_transcript(url):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     docs = text_splitter.split_documents(transcript)
 
-    db = FAISS.from_documents(docs, embeddings)
-    return db
+    return FAISS.from_documents(docs, embeddings)
 
 
 def get_response_from_query(db, query, k=4):

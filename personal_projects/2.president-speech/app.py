@@ -74,8 +74,7 @@ def load_embeddings(db_path, embeddings):
     Returns:
         - vectordb
     """
-    vectordb = Chroma(persist_directory=db_path, embedding_function=embeddings)
-    return vectordb
+    return Chroma(persist_directory=db_path, embedding_function=embeddings)
 
 def query_LLM(vector_db, args):
     """

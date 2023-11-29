@@ -16,23 +16,17 @@ from sklearn.model_selection import train_test_split
 #Read PDF data
 def read_pdf_data(pdf_file):
     pdf_page = PdfReader(pdf_file)
-    text = ""
-    for page in pdf_page.pages:
-        text += page.extract_text()
-    return text
+    return "".join(page.extract_text() for page in pdf_page.pages)
 
 #Split data into chunks
 def split_data(text):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
     docs = text_splitter.split_text(text)
-    docs_chunks =text_splitter.create_documents(docs)
-    return docs_chunks
+    return text_splitter.create_documents(docs)
 
 #Create embeddings instance
 def create_embeddings_load_data():
-    #embeddings = OpenAIEmbeddings()
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
+    return SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 #Function to push data to Pinecone
 def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,embeddings,docs):
@@ -43,20 +37,17 @@ def push_to_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,em
     )
 
     index_name = pinecone_index_name
-    index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
-    return index
+    return Pinecone.from_documents(docs, embeddings, index_name=index_name)
 
 #*********Functions for dealing with Model related tasks...************
 
 #Read dataset for model creation
 def read_data(data):
-    df = pd.read_csv(data,delimiter=',', header=None)  
-    return df
+    return pd.read_csv(data,delimiter=',', header=None)
 
 #Create embeddings instance
 def get_embeddings():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
+    return SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 #Generating embeddings for our input dataset
 def create_embeddings(df,embeddings):

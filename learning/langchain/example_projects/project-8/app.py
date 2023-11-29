@@ -51,7 +51,7 @@ if data is not None:
         data = json.load(data)
         data_text = json.dumps(data, indent=4)
     else:
-        st.warning("Unsupported file type: {}".format(data.type))
+        st.warning(f"Unsupported file type: {data.type}")
 
 
 # Captures User Inputs
@@ -59,8 +59,7 @@ prompt = st.text_input('Please provide the topic of the video', key="prompt")
 video_length = st.text_input('Expected Video Length 🕒 (in minutes)', key="video_length")
 creativity = st.slider('Words limit ✨ - (0 LOW || 1 HIGH)', 0.0, 1.0, 0.2, step=0.1)
 
-submit = st.button("Generate Script for me")
-if submit:
+if submit := st.button("Generate Script for me"):
     if st.session_state['API_Key']:
 
         search_result, title, script = generate_script(prompt, data_text, video_length, creativity, st.session_state['API_Key'])

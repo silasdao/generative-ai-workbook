@@ -21,9 +21,9 @@ if 'labels_test' not in st.session_state:
 if 'svm_classifier' not in st.session_state:
     st.session_state['svm_classifier'] =''
 
- 
+
 st.title("Let's build our Model...")
- 
+
 # Create tabs
 tab_titles = ['Data Preprocessing', 'Model Training', 'Model Evaluation',"Save Model"]
 tabs = st.tabs(tab_titles)
@@ -38,9 +38,7 @@ with tabs[0]:
     # Capture the CSV file
     data = st.file_uploader("Upload CSV file",type="csv")
 
-    button = st.button("Load data",key="data")
-
-    if button:
+    if button := st.button("Load data", key="data"):
         with st.spinner('Wait for it...'):
             our_data=read_data(data)
             embeddings=get_embeddings()
@@ -52,28 +50,24 @@ with tabs[0]:
 with tabs[1]:
     st.header('Model Training')
     st.write('Here we train the model...')
-    button = st.button("Train model",key="model")
-    
-    if button:
-            with st.spinner('Wait for it...'):
-                st.session_state['sentences_train'], st.session_state['sentences_test'], st.session_state['labels_train'], st.session_state['labels_test']=split_train_test__data(st.session_state['cleaned_data'])
-                
-                # Initialize a support vector machine, with class_weight='balanced' because 
-                # our training set has roughly an equal amount of positive and negative 
-                # sentiment sentences
-                st.session_state['svm_classifier']  = make_pipeline(StandardScaler(), SVC(class_weight='balanced')) 
+    if button := st.button("Train model", key="model"):
+        with st.spinner('Wait for it...'):
+            st.session_state['sentences_train'], st.session_state['sentences_test'], st.session_state['labels_train'], st.session_state['labels_test']=split_train_test__data(st.session_state['cleaned_data'])
 
-                # fit the support vector machine
-                st.session_state['svm_classifier'].fit(st.session_state['sentences_train'], st.session_state['labels_train'])
-            st.success('Done!')
+            # Initialize a support vector machine, with class_weight='balanced' because 
+            # our training set has roughly an equal amount of positive and negative 
+            # sentiment sentences
+            st.session_state['svm_classifier']  = make_pipeline(StandardScaler(), SVC(class_weight='balanced')) 
+
+            # fit the support vector machine
+            st.session_state['svm_classifier'].fit(st.session_state['sentences_train'], st.session_state['labels_train'])
+        st.success('Done!')
 
 #Model Evaluation TAB
 with tabs[2]:
     st.header('Model Evaluation')
     st.write('Here we evaluate the model...')
-    button = st.button("Evaluate model",key="Evaluation")
-
-    if button:
+    if button := st.button("Evaluate model", key="Evaluation"):
         with st.spinner('Wait for it...'):
             accuracy_score=get_score(st.session_state['svm_classifier'],st.session_state['sentences_test'],st.session_state['labels_test'])
             st.success(f"Validation accuracy is {100*accuracy_score}%!")
@@ -84,7 +78,7 @@ with tabs[2]:
 
             #text="lack of communication regarding policy updates salary, can we please look into it?"
             text="Rude driver with scary driving"
-            st.write("***Our issue*** : "+text)
+            st.write(f"***Our issue*** : {text}")
 
             #Converting out TEXT to NUMERICAL representaion
             embeddings= get_embeddings()
@@ -92,8 +86,8 @@ with tabs[2]:
 
             #Sample prediction using our trained model
             result= st.session_state['svm_classifier'].predict([query_result])
-            st.write("***Department it belongs to*** : "+result[0])
-            
+            st.write(f"***Department it belongs to*** : {result[0]}")
+                        
 
         st.success('Done!')
 
@@ -102,9 +96,7 @@ with tabs[3]:
     st.header('Save model')
     st.write('Here we save the model...')
 
-    button = st.button("Save model",key="save")
-    if button:
-
+    if button := st.button("Save model", key="save"):
         with st.spinner('Wait for it...'):
              joblib.dump(st.session_state['svm_classifier'], 'modelsvm.pk1')
         st.success('Done!')

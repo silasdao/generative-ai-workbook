@@ -64,7 +64,7 @@ class Game:
     def can_move_to_position(self, x, y):
         if 0 <= x < len(self.map.map_array[0]) and 0 <= y < len(self.map.map_array):
             if self.map.map_array[y][x] == config.MAP_TILE_GRASS:
-                return not any(person.position == [x, y] for person in self.people)
+                return all(person.position != [x, y] for person in self.people)
         return False
         
     def place_people_on_map(self):

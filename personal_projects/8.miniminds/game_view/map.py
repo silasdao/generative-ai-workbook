@@ -25,21 +25,20 @@ class Map:
         if not os.path.exists(file_path):  # Check if the file exists
             generated_map = self.generate_map()  # Generate the map
             self.save_map_to_file(generated_map, file_path)  # Save the generated map to a file
-        
+
         with open(file_path) as map_file:
             for line in map_file:
-                tiles = [tile for tile in line.strip().split()]
+                tiles = list(line.strip().split())
                 self.map_array.append(tiles)
 
     def render(self, player, objects):
         self.determine_camera(player)
         for y_pos, line in enumerate(self.map_array):
             for x_pos, tile in enumerate(line):
-                image = self.map_tile_image.get(tile)
-                if image:
+                if image := self.map_tile_image.get(tile):
                     rect = pygame.Rect(x_pos * config.SCALE, y_pos * config.SCALE - (self.camera[1] * config.SCALE), config.SCALE, config.SCALE)
                     self.screen.blit(image, rect)
-                
+
 
         for object in objects:
             # Check if object is an instance of Person

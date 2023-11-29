@@ -72,11 +72,7 @@ def scrape_website(objective: str, url: str):
 
         # If the text content is large, then
         # create a summarization
-        if len(text) > 10000:
-            output = summary(objective, text)
-            return output
-        else:
-            return text
+        return summary(objective, text) if len(text) > 10000 else text
     else:
         print(f"HTTP request failed with status code {response.status_code}")
 
@@ -107,9 +103,7 @@ def summary(objective, content):
         verbose=True
     )
 
-    output = summary_chain.run(input_documents=docs, objective=objective)
-
-    return output
+    return summary_chain.run(input_documents=docs, objective=objective)
 
 
 class ScrapeWebsiteInput(BaseModel):
@@ -201,5 +195,4 @@ app = FastAPI()
 def researchAgent(query: Query):
     query = query.query
     content = agent({"input": query})
-    actual_content = content['output']
-    return actual_content
+    return content['output']

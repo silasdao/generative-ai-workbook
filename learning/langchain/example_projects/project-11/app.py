@@ -19,9 +19,7 @@ def main():
     # Upload the Resumes (pdf files)
     pdf = st.file_uploader("Upload resumes here, only PDF files allowed", type=["pdf"],accept_multiple_files=True)
 
-    submit=st.button("Help me with the analysis")
-
-    if submit:
+    if submit := st.button("Help me with the analysis"):
         with st.spinner('Wait for it...'):
 
             #Creating a unique ID, so that we can use to query and get only the user uploaded documents from PINECONE vector store
@@ -31,7 +29,7 @@ def main():
             final_docs_list=create_docs(pdf,st.session_state['unique_id'])
 
             #Displaying the count of resumes that have been uploaded
-            st.write("*Resumes uploaded* :"+str(len(final_docs_list)))
+            st.write(f"*Resumes uploaded* :{len(final_docs_list)}")
 
             #Create embeddings instance
             embeddings=create_embeddings_load_data()
@@ -50,19 +48,19 @@ def main():
             #For each item in relavant docs - we are displaying some info of it on the UI
             for item in range(len(relavant_docs)):
                 
-                st.subheader("👉 "+str(item+1))
+                st.subheader(f"👉 {str(item + 1)}")
 
                 #Displaying Filepath
                 st.write("**File** : "+relavant_docs[item][0].metadata['name'])
 
                 #Introducing Expander feature
                 with st.expander('Show me 👀'): 
-                    st.info("**Match Score** : "+str(relavant_docs[item][1]))
+                    st.info(f"**Match Score** : {str(relavant_docs[item][1])}")
                     #st.write("***"+relavant_docs[item][0].page_content)
-                    
+
                     #Gets the summary of the current item using 'get_summary' function that we have created which uses LLM & Langchain chain
                     summary = get_summary(relavant_docs[item][0])
-                    st.write("**Summary** : "+summary)
+                    st.write(f"**Summary** : {summary}")
 
         st.success("Hope I was able to save your time❤️")
 

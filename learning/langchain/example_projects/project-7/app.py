@@ -15,9 +15,7 @@ st.header("Please upload your CSV file here:")
 data = st.file_uploader("Upload CSV file", type="csv")
 
 query = st.text_area("Enter your query")
-button = st.button("Generate Response")
-
-if button:
+if button := st.button("Generate Response"):
     # Get Response
     answer =  query_agent(data,query)
     st.write(answer)

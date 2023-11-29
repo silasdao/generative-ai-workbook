@@ -14,9 +14,7 @@ def main():
     # Upload the Invoices (pdf files)
     pdf = st.file_uploader("Upload invoices here, only PDF files allowed", type=["pdf"],accept_multiple_files=True)
 
-    submit=st.button("Extract Data")
-
-    if submit:
+    if submit := st.button("Extract Data"):
         with st.spinner('Wait for it...'):
             df=create_docs(pdf)
             st.write(df.head())

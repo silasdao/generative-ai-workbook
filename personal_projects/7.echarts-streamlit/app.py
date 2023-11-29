@@ -30,20 +30,20 @@ def main():
 
     ###################### Side Bar #################################
     with st.sidebar:
-        st.sidebar.title(f"Visualizations")
+        st.sidebar.title("Visualizations")
         side_vis = None
 
     def get_chart(data):
 
         # Filter out rows where DIAGNOSED_COVID is not 1 and drop rows with null DIAGNOSES_DATE
         data = data[data['DIAGNOSED_COVID'] == 1].dropna(subset=['DIAGNOSES_DATE'])
-        
+
         # Group by DIAGNOSES_DATE and count the number of cases per date
         covid_cases_by_date = data.groupby('DIAGNOSES_DATE').size().reset_index(name='cases_count')
-        
+
         # Sort by date
         covid_cases_by_date.sort_values(by='DIAGNOSES_DATE', inplace=True)
-        
+
         dates = covid_cases_by_date['DIAGNOSES_DATE'].tolist()
         cases_count = covid_cases_by_date['cases_count'].cumsum().tolist()
 
@@ -84,7 +84,7 @@ def main():
                 ]
             }
         return option
-    
+
     ###################### Chat Interface #################################
 
     response_container = st.container()
@@ -104,9 +104,9 @@ def main():
                     with response_container:
                         for i in range(len(st.session_state['messages'])):
                             if (i % 2) == 0:
-                                message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
+                                message(st.session_state['messages'][i], is_user=True, key=f'{str(i)}_user')
                             else:
-                                message(st.session_state['messages'][i], key=str(i) + '_AI')
+                                message(st.session_state['messages'][i], key=f'{str(i)}_AI')
                                 with st.sidebar:
                                     st_echarts(get_chart(st.session_state['data']), key=chart_count)
                                     chart_count += 1

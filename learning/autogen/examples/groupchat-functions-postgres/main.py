@@ -56,24 +56,6 @@ def main():
         # Create our terminate msg function
         def is_termination_msg(content):
             have_content = content.get("content", None) is not None
-            if have_content and "APPROVED" in content["content"]:
-                return True
-            return False
+            return have_content and "APPROVED" in content["content"]
 
 
-
-
-            table_definitions = db.get_table_definitions_for_prompt()
-            prompt = llm.add_cap_refl(args.prompt,  # "Show jobs that were created after September 25th 20231"
-                                    "Here are the table definitions:",
-                                    "TABLE_DEFINITIONS", table_definitions)
-            prompt = llm.add_cap_refl(prompt, "Please provide the SOL query:", "SOL_QUERY")
-
-            prompt_response = llm.prompt(prompt)
-            sql_query = prompt_response.split(",")[1].strip()
-            result = db.run_sq(sql_query)
-            print(result)
-
-
-if __name__ == "__main__":
-    pass

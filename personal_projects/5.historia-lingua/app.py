@@ -80,7 +80,7 @@ def get_available_models():
             print("Error in getting available models: HTTP status code", response.status_code)
             return []
     except Exception as e:
-        print("Error in getting available models:", str(e))
+        print("Error in getting available models:", e)
         return []
 
 
@@ -93,30 +93,28 @@ def select_model():
         set_up_chains(session['model'])
         return redirect('/')
     else:
-        if 'api_key' in session:
-            # Set the API key from session
-            openai.api_key = session['api_key']
-            # Use the key to list models
-            session['models'] = [model.id for model in openai.Model.list().data]
-            return render_template('select_model.html', models=session['models'])
-        else:
+        if 'api_key' not in session:
             # Redirect to API key page if no key is found in session
             return redirect('/api_key')
+        # Set the API key from session
+        openai.api_key = session['api_key']
+        # Use the key to list models
+        session['models'] = [model.id for model in openai.Model.list().data]
+        return render_template('select_model.html', models=session['models'])
 
 
 
 @app.route('/api_key', methods=['GET', 'POST'])
 def api_key():
-    if request.method == 'POST':
-        # Store API key in session
-        session['api_key'] = request.form['api-key']
-        # Redirect to select_model after setting API key
-        # If the model isn't set, then it will use the set api 
-        # key and request the list of available models 
-        # with select_models.html
-        return redirect('/select_model')
-    else:
+    if request.method != 'POST':
         return render_template('api_key.html')
+    # Store API key in session
+    session['api_key'] = request.form['api-key']
+    # Redirect to select_model after setting API key
+    # If the model isn't set, then it will use the set api 
+    # key and request the list of available models 
+    # with select_models.html
+    return redirect('/select_model')
 
 
 @app.route('/')

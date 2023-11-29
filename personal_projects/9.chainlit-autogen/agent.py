@@ -66,17 +66,7 @@ class MultiAgent():
         Returns:
             list: List of configuration options.
         """
-        # For open sources models
-        # config_list = [
-        #     {
-        #         "model": "ollama/mistral",
-        #         # "model": "ollama/llama2",
-        #         "api_base": "http://0.0.0.0:8001",
-        #         "api_type": "litellm"
-        #     }
-        # ]
-
-        config_list = autogen.config_list_from_dotenv(
+        return autogen.config_list_from_dotenv(
             dotenv_file_path=self.env_path,
             model_api_key_map={
                 "gpt-4": "OPENAI_API_KEY",
@@ -87,9 +77,8 @@ class MultiAgent():
                     # self.model,
                     "gpt-4"
                 }
-            }
+            },
         )
-        return config_list
     
     def instiate_agents(self):
         logging.info("Initializing Agents")

@@ -21,18 +21,15 @@ def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,
 
     index_name = pinecone_index_name
 
-    index = Pinecone.from_existing_index(index_name, embeddings)
-    return index
+    return Pinecone.from_existing_index(index_name, embeddings)
 
 def create_embeddings():
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
+    return SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 #This function will help us in fetching the top relevent documents from our vector store - Pinecone Index
 def get_similar_docs(index,query,k=2):
 
-    similar_docs = index.similarity_search(query, k=k)
-    return similar_docs
+    return index.similarity_search(query, k=k)
 
 def get_answer(docs,user_input):
     chain = load_qa_chain(OpenAI(), chain_type="stuff")

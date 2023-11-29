@@ -178,9 +178,7 @@ age_option= st.selectbox(
 # Slider
 number_of_words= st.slider('Words limit', 1, 200, 25)
 
-submit = st.button("Generate")
-
-if submit:
+if submit := st.button("Generate"):
     st.write(
         getLLMResponse(
             form_input, 

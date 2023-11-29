@@ -71,14 +71,14 @@ class PostgresManager:
         AND pg_class.relname = %s
         AND pg_namespace.nspname = 'public'
         """
-        
+
         self.cur.execute(get_def_stmt, (table_name, ))
         rows = self.cur.fetchall()
-        
-        create_table_stmt = "CREATE TABLE {} (\n".format(table_name)
+
+        create_table_stmt = f"CREATE TABLE {table_name} (\n"
         for row in rows:
-            create_table_stmt += "{} {} , \n".format(row[2], row[3])
-        
+            create_table_stmt += f"{row[2]} {row[3]} , \n"
+
         create_table_stmt = create_table_stmt.rstrip(", \n") + ");"
-        
+
         return create_table_stmt

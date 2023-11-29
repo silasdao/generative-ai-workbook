@@ -7,8 +7,7 @@ from langchain.llms import OpenAI
 #Function to return the response
 def load_answer(question):
     llm = OpenAI(model_name="text-davinci-003",temperature=0)
-    answer=llm(question)
-    return answer
+    return llm(question)
 
 
 #App UI starts here
@@ -17,17 +16,13 @@ st.header("LangChain Demo")
 
 #Gets the user input
 def get_text():
-    input_text = st.text_input("You: ", key="input")
-    return input_text
+    return st.text_input("You: ", key="input")
 
 
 user_input=get_text()
 response = load_answer(user_input)
 
-submit = st.button('Generate')  
-
-#If generate button is clicked
-if submit:
+if submit := st.button('Generate'):
     st.subheader("Answer:")
     st.write(response)
 

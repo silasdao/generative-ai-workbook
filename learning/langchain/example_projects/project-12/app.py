@@ -63,8 +63,5 @@ with col3:
                                        index=0)
 
 
-submit = st.button("Generate")
-
-#When 'Generate' button is clicked, execute the below code
-if submit:
+if submit := st.button("Generate"):
     st.write(getLLMResponse(form_input,email_sender,email_recipient,email_style))

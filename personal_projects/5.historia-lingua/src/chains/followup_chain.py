@@ -33,12 +33,9 @@ class FollowUpChain():
         self.llm_chains.append(llm_chain)
 
     def get_template(self, input):
-        # Create the first PromptTemplate
-        prompt = langchain.PromptTemplate(
-            input_variables=input,
-            template=PROMPT_STRING
+        return langchain.PromptTemplate(
+            input_variables=input, template=PROMPT_STRING
         )
-        return prompt
 
     def get_history_chain(self):
         prompt_1 = self.get_template(input=["location", "time_period", "previous_response", "selected_text"])

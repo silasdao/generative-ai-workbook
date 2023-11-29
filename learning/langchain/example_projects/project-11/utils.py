@@ -13,11 +13,8 @@ from langchain import HuggingFaceHub
 
 #Extract Information from PDF file
 def get_pdf_text(pdf_doc):
-    text = ""
     pdf_reader = PdfReader(pdf_doc)
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-    return text
+    return "".join(page.extract_text() for page in pdf_reader.pages)
 
 
 
@@ -40,9 +37,7 @@ def create_docs(user_pdf_list, unique_id):
 
 #Create embeddings instance
 def create_embeddings_load_data():
-    #embeddings = OpenAIEmbeddings()
-    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    return embeddings
+    return SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 
 #Function to push data to Vector Store - Pinecone here
@@ -67,8 +62,7 @@ def pull_from_pinecone(pinecone_apikey,pinecone_environment,pinecone_index_name,
 
     index_name = pinecone_index_name
 
-    index = Pinecone.from_existing_index(index_name, embeddings)
-    return index
+    return Pinecone.from_existing_index(index_name, embeddings)
 
 
 
@@ -83,9 +77,9 @@ def similar_docs(query,k,pinecone_apikey,pinecone_environment,pinecone_index_nam
     index_name = pinecone_index_name
 
     index = pull_from_pinecone(pinecone_apikey,pinecone_environment,index_name,embeddings)
-    similar_docs = index.similarity_search_with_score(query, int(k),{"unique_id":unique_id})
-    #print(similar_docs)
-    return similar_docs
+    return index.similarity_search_with_score(
+        query, int(k), {"unique_id": unique_id}
+    )
 
 
 # Helps us get the summary of a document
@@ -93,9 +87,7 @@ def get_summary(current_doc):
     llm = OpenAI(temperature=0)
     #llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
     chain = load_summarize_chain(llm, chain_type="map_reduce")
-    summary = chain.run([current_doc])
-
-    return summary
+    return chain.run([current_doc])
 
 
 

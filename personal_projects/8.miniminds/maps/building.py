@@ -5,7 +5,7 @@ class Building:
     def __init__(self, image_name, position, size):
         self.position = position[:]
         self.size = size[:]
-        self.image = pygame.image.load("imgs/rooms/" + str(image_name) + ".png")
+        self.image = pygame.image.load(f"imgs/rooms/{str(image_name)}.png")
         self.image = pygame.transform.scale(self.image, (self.size[0] * config.SCALE, self.size[1] * config.SCALE))
 
     def update(self):

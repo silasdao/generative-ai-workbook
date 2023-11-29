@@ -38,15 +38,12 @@ def load_answer(question):
     return assistant_answer.content
 
 def get_text():
-    input_text = st.text_input("You: ", key=input)
-    return input_text
+    return st.text_input("You: ", key=input)
 
 
 chat = ChatOpenAI(temperature=0)
 user_input=get_text()
-submit = st.button('Generate')  
-
-if submit:
+if submit := st.button('Generate'):
     response = load_answer(user_input)
     st.subheader("Answer:")
     st.write(response,key=1)

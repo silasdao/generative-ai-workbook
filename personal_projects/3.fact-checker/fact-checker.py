@@ -12,15 +12,11 @@ from streamlit_jupyter import StreamlitPatcher, tqdm
 
 StreamlitPatcher().jupyter()  
 
-from langchain.chains import LLMChain, SimpleSequentialChain 
-from langchain.llms import OpenAI 
+from langchain.chains import LLMChain, SimpleSequentialChain
+from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate 
 
-# %% example.ipynb 3
-# If an API key has been provided, create an OpenAI language model instance
-API = os.getenv('OPENAI_KEY')
-
-if API:
+if API := os.getenv('OPENAI_KEY'):
     llm = OpenAI(temperature=0.7, openai_api_key=os.getenv('OPENAI_KEY'))
 else:
     # If an API key hasn't been provided, display a warning message
@@ -72,9 +68,7 @@ if st.button("Tell me about it", type="primary"):
     )
 
     # Final Chain: Generating the final answer to the user's question based on the facts and assumptions
-    template = """In light of the above facts, how would you answer the question '{}'""".format(
-        user_question
-    )
+    template = f"""In light of the above facts, how would you answer the question '{user_question}'"""
     template = """{facts}\n""" + template
     prompt_template = PromptTemplate(input_variables=["facts"], template=template)
     answer_chain = LLMChain(llm=llm, prompt=prompt_template)

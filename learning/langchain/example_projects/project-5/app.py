@@ -72,9 +72,9 @@ with container:
             with response_container:
                 for i in range(len(st.session_state['messages'])):
                     if (i % 2) == 0:
-                        message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
+                        message(st.session_state['messages'][i], is_user=True, key=f'{str(i)}_user')
                     else:
-                        message(st.session_state['messages'][i], key=str(i) + '_AI')
+                        message(st.session_state['messages'][i], key=f'{str(i)}_AI')
 
         if submit_button:
             if st.session_state['API_Key'] == '':
@@ -83,13 +83,13 @@ with container:
                 st.session_state['messages'].append(user_input)
                 model_response = getresponse(user_input, st.session_state['API_Key'])
                 st.session_state['messages'].append(model_response)
-                
+
                 with response_container:
                     for i in range(len(st.session_state['messages'])):
                         if (i % 2) == 0:
-                            message(st.session_state['messages'][i], is_user=True, key=str(i) + '_user')
+                            message(st.session_state['messages'][i], is_user=True, key=f'{str(i)}_user')
                         else:
-                            message(st.session_state['messages'][i], key=str(i) + '_AI')
+                            message(st.session_state['messages'][i], key=f'{str(i)}_AI')
             
                 
 
